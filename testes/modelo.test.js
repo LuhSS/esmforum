@@ -23,3 +23,29 @@ test('Testando cadastro de três perguntas', () => {
   expect(perguntas[2].num_respostas).toBe(0);
   expect(perguntas[1].id_pergunta).toBe(perguntas[2].id_pergunta-1);
 });
+
+test('Testando cadastro de resposta e obtenção de respostas', () => {
+  const id = modelo.cadastrar_pergunta('Qual a capital da França?');
+  const idResposta1 = modelo.cadastrar_resposta(id, 'Paris');
+  const idResposta2 = modelo.cadastrar_resposta(id, 'Lyon');
+
+  const respostas = modelo.get_respostas(id);
+  expect(respostas.length).toBe(2);
+  expect(respostas[0].texto).toBe('Paris');
+  expect(respostas[1].texto).toBe('Lyon');
+});
+
+test('Testando get_pergunta', () => {
+  const id = modelo.cadastrar_pergunta('Qual a capital da Alemanha?');
+  const pergunta = modelo.get_pergunta(id);
+  expect(pergunta.texto).toBe('Qual a capital da Alemanha?');
+  expect(pergunta.id_pergunta).toBe(id);
+});
+
+test('Testando get_num_respostas', () => {
+  const id = modelo.cadastrar_pergunta('Quanto é 5 + 5?');
+  expect(modelo.get_num_respostas(id)).toBe(0);
+  modelo.cadastrar_resposta(id, '10');
+  modelo.cadastrar_resposta(id, 'dez');
+  expect(modelo.get_num_respostas(id)).toBe(2);
+});
